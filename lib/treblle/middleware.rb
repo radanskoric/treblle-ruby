@@ -40,6 +40,8 @@ module Treblle
     def handle_monitoring(env, rack_response, started_at)
       request = RequestBuilder.new(env).build
       response = ResponseBuilder.new(rack_response).build
+      # Zasto i generate payload nije u thread-u? Znam da nije razlika na MRI, al ako netko koristi JRuby moze biti
+      # a nije tolko velika razlika u organizaciji koda.
       payload = GeneratePayload.new(request: request, response: response, started_at: started_at).call
 
       Dispatcher.new(payload: payload).call

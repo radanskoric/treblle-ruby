@@ -61,6 +61,7 @@ module Treblle
     def get_body(request_metadata)
       case request_metadata.media_type
       when 'application/x-www-form-urlencoded', 'multipart/form-data'
+        # FORM Data moze biti u vise nivoa. Mozda bolje upotrijebiti deep_dup iz ActiveSupporta?
         request_metadata.POST.dup
       else
         body = request_metadata.body.read

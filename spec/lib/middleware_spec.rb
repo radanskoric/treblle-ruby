@@ -37,6 +37,16 @@ RSpec.describe Treblle::Middleware do
   end
 
   before do
+    # allow_any_instance_of je vise legacy metodu za koju cak RSpec dokumentacija da je bolje ne koristiti:
+    # https://rspec.info/features/3-13/rspec-mocks/working-with-legacy-code/any-instance/
+    # A u ovom slucaju je jako lako izbjeci. Middleware vec prima opcinonalnio configuration parametar.
+    # Kod bi mogao izgledati:
+    # subject { described_class.new(app, configuration: configuration) }
+
+    # ...
+    # let(:configuration) {
+    #   instance_double(Treblle::Configuration, enabled_environment?: true, api_key: 'your_api_key', project_id: 'project_id', get_uri: URI(treblle_url))
+    # }
     allow_any_instance_of(Treblle::Configuration).to receive(:enabled_environment?).and_return(true)
     allow_any_instance_of(Treblle::Configuration).to receive(:api_key).and_return('your_api_key')
     allow_any_instance_of(Treblle::Configuration).to receive(:project_id).and_return('project_id')

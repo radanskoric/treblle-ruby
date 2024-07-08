@@ -36,6 +36,8 @@ module Treblle
     def calculate_size(body, headers)
       return 0 if body.nil?
 
+      # Ovaj encode ovdje serializira nesto sta je liniju prije bilo deserijalizirano.
+      # U svrhu cim manjeg overhead-a, mozda ima smisla samo koristiti size od originala?
       headers.fetch('content-length', nil) || ActiveSupport::JSON.encode(body).size
     end
 

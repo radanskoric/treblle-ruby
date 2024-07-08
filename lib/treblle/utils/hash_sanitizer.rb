@@ -32,6 +32,7 @@ module Treblle
         end
 
         def sanitize_value(key, value, sensitive_attrs)
+          # Zasto otkriti duljinu originalne vrijednosti? Osobno bi radije da uvijek sanitizira kao "****"
           sensitive_attrs.include?(key.to_s) ? '*' * value.to_s.length : value
         end
       end

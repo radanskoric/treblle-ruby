@@ -28,10 +28,21 @@ module Treblle
     end
 
     def timestamp
+      # Ovaj format samo odbaci vremensku zonu, ali ne prebaci vrijeme prije toga u neku fiksnu zonu.
+      # Neznam za sta se tocno koristi vrijeme ali ne bi me cudilo da to pocne uzrokovat probleme za slucaj
+      # da je ista aplikacija deployana na serverima u vise razlicitih vremenskih zona.
+      # Ako do sad nije bio problem to je vjerojatno zato sto vecina ljudi vrti Rail aplikacije u UTC zoni, ali
+      # da sprijecis probleme mozda bi bilo pametno napraviti: started_at.utc.strftime(TIME_FORMAT)
       started_at.strftime(TIME_FORMAT)
     end
 
     def load_time
+      # Kolika je ocekivana preciznost na ovome? Trenutno pozivas Time.now usred procesa generiranja payloada sto znaci
+      # da mjeris vrijeme izvrsavanja endpointa + jos nesto malo do neke tocke unutar generiranja json-a.
+      # Nije to puno ali ovisno kolika se preciznost ocekuje i koliko je brzi endpoint moglo bi biti bitno.
+      # Npr. neki healtcheck endpointi su obicno jako brzi, ovo bi moglo unijeti dovoljno buke da postane nekome bitno.
+      # Ne bi se inace zamarao ali fix je jako jednostavan: middleware ionako ima pola logike u sebi, kod ce postat i
+      # jednostavniji i precizniji ako middleware odmah izmjeri `load_time`.
       Time.now - started_at
     end
 
